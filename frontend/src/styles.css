@@ -27,7 +27,8 @@ body{margin:0;background:var(--bg);color:var(--text)}
 .modal-backdrop{position:fixed;inset:0;background:linear-gradient(rgba(0,0,0,0.6),transparent);display:flex;align-items:center;justify-content:center}
 .modal{background:var(--panel);padding:16px;border-radius:8px;width:420px}
 .modal form label{display:block;margin-bottom:8px}
-.modal input,.modal select,.modal textarea{width:100%;padding:8px;border-radius:6px;border:1px solid rgba(255,255,255,0.04);background:transparent;color:var(--text)}
+.modal input,.modal select,.modal textarea{width:100%;padding:8px;border-radius:6px;border:1px solid rgba(255,255,255,0.1);background:#1a2332;color:var(--text)}
+.modal select option{background:#1a2332;color:var(--text)}
 .modal .actions{display:flex;justify-content:flex-end;gap:8px;margin-top:12px}
 .modal button{padding:8px 12px;border-radius:6px}
 .actions button{margin-left:8px}
