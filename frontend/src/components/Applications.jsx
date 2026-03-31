@@ -33,6 +33,10 @@ export default function Applications({api}){
 
   return (
     <div className="applications">
+      <div className="page-header">
+        <h2>Applications</h2>
+        <p>Manage and track all your job applications</p>
+      </div>
       <div className="toolbar">
         <input placeholder="Search company, role, notes" value={q} onChange={e=>setQ(e.target.value)} />
         <select value={status} onChange={e=>setStatus(e.target.value)}>
@@ -42,7 +46,7 @@ export default function Applications({api}){
           <option>Offer</option>
           <option>Rejected</option>
         </select>
-        <button onClick={()=>setModal({})}>+ Add</button>
+        <button className="add-btn" onClick={()=>setModal({})}>+ Add</button>
       </div>
       <table className="apps-table">
         <thead><tr><th>Company</th><th>Role</th><th>Status</th><th>Date</th><th>Actions</th></tr></thead>
@@ -51,7 +55,7 @@ export default function Applications({api}){
             <tr key={a.id}>
               <td>{a.company}</td>
               <td>{a.role}</td>
-              <td>{a.status}</td>
+              <td><span className={`status-cell status-${a.status}`}>{a.status}</span></td>
               <td>{a.date_applied || a.created_at?.slice(0,10)}</td>
               <td className="actions">
                 <button onClick={()=>setModal(a)}>Edit</button>
