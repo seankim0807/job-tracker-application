@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from 'react'
+import React, {useState} from 'react'
 import { api } from './api'
 import Dashboard from './components/Dashboard'
 import Applications from './components/Applications'
@@ -8,14 +8,14 @@ export default function App(){
 
   return (
     <div className="app-root">
-      <header className="topbar">
-        <h1>Job Tracker</h1>
+      <aside className="sidebar">
+        <h1>Job <span>Tracker</span></h1>
         <nav>
-          <button onClick={()=>setView('dashboard')} className={view==='dashboard'? 'active':''}>Dashboard</button>
-          <button onClick={()=>setView('applications')} className={view==='applications'? 'active':''}>Applications</button>
+          <button onClick={()=>setView('dashboard')} className={view==='dashboard'?'active':''}>Dashboard</button>
+          <button onClick={()=>setView('applications')} className={view==='applications'?'active':''}>Applications</button>
         </nav>
-      </header>
-      <main>
+      </aside>
+      <main className="main-content">
         {view==='dashboard' ? <Dashboard api={api} /> : <Applications api={api} />}
       </main>
     </div>

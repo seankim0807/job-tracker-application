@@ -1,7 +1,9 @@
 import React, {useEffect, useState} from 'react'
 
+const STATUSES = ['Applied','Interviewing','Offer','Rejected']
+
 export default function Dashboard({api}){
-  const [stats, setStats] = useState({total:0,counts:{},response_rate:0})
+  const [stats, setStats] = useState({total:0, counts:{}, response_rate:0})
   const [recent, setRecent] = useState([])
 
   useEffect(()=>{
@@ -11,35 +13,45 @@ export default function Dashboard({api}){
 
   return (
     <div className="dashboard">
-      <section className="cards">
-        <div className="card">
-          <strong>Total</strong>
-          <div className="big">{stats.total}</div>
+      <div className="page-header">
+        <h2>Dashboard</h2>
+        <p>Overview of your job search progress</p>
+      </div>
+
+      <div className="pipeline">
+        <div className="pipeline-item">
+          <div className="count">{stats.total}</div>
+          <div className="label">Total</div>
         </div>
-        <div className="card">
-          <strong>Applied</strong>
-          <div className="big">{stats.counts?.Applied || 0}</div>
+        {STATUSES.map(s=>(
+          <div className="pipeline-item" key={s}>
+            <div className="count">{stats.counts?.[s] || 0}</div>
+            <div className="label">{s}</div>
+          </div>
+        ))}
+        <div className="pipeline-item">
+          <div className="count">{stats.response_rate}%</div>
+          <div className="label">Response Rate</div>
         </div>
-        <div className="card">
-          <strong>Interviewing</strong>
-          <div className="big">{stats.counts?.Interviewing || 0}</div>
-        </div>
-        <div className="card">
-          <strong>Offer</strong>
-          <div className="big">{stats.counts?.Offer || 0}</div>
-        </div>
-      </section>
-      <section className="recent">
-        <h2>Recent Applications</h2>
+      </div>
+
+      <div className="recent">
+        <div className="recent-header">Recent Applications</div>
         <ul>
-          {recent.slice(0,8).map(a=> (
+          {recent.slice(0,8).map(a=>(
             <li key={a.id}>
-              <div className="left">{a.company} — {a.role}</div>
-              <div className="right">{a.status}</div>
+              <div>
+                <div className="company">{a.company}</div>
+                <div className="role">{a.role}</div>
+              </div>
+              <span className={`status-badge status-${a.status}`}>{a.status}</span>
             </li>
           ))}
+          {recent.length === 0 && (
+            <li style={{color:'var(--muted)',justifyContent:'center',padding:'24px'}}>No applications yet</li>
+          )}
         </ul>
-      </section>
+      </div>
     </div>
   )
 }

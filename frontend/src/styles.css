@@ -1,70 +1,270 @@
-:root{
-  --bg:#0b1a1f;
-  --panel:#0f2329;
-  --panel2:#132a31;
-  --muted:#7a9da8;
-  --accent:#0d9488;
-  --accent-light:#14b8a6;
-  --text:#d4eef2;
+:root {
+  --bg: #f0f4f3;
+  --panel: #ffffff;
+  --sidebar: #0d3d2e;
+  --sidebar-active: #1a5c44;
+  --accent: #0d7a55;
+  --accent-light: #10a872;
+  --text: #1a2e27;
+  --muted: #6b8f80;
+  --border: #dde8e4;
+  --header-bg: #ffffff;
 }
-*{box-sizing:border-box;font-family:Inter,ui-sans-serif,system-ui,Segoe UI,Roboto}
-body{margin:0;background:var(--bg);color:var(--text)}
-.app-root{max-width:1000px;margin:24px auto;padding:16px}
 
-/* Topbar */
-.topbar{display:flex;justify-content:space-between;align-items:center;margin-bottom:24px;padding-bottom:16px;border-bottom:1px solid rgba(13,148,136,0.2)}
-.topbar h1{margin:0;font-size:1.4rem;color:var(--accent-light);letter-spacing:0.5px}
-.topbar nav button{background:transparent;border:1px solid transparent;color:var(--muted);padding:8px 16px;margin-left:8px;border-radius:6px;cursor:pointer;transition:all 0.15s}
-.topbar nav button:hover{color:var(--text);border-color:rgba(13,148,136,0.4)}
-.topbar nav button.active{background:rgba(13,148,136,0.15);color:var(--accent-light);border-color:var(--accent)}
+* { box-sizing: border-box; font-family: Inter, ui-sans-serif, system-ui, Segoe UI, Roboto }
+body { margin: 0; background: var(--bg); color: var(--text) }
 
-/* Dashboard cards */
-.dashboard .cards{display:flex;gap:12px;margin-bottom:16px}
-.card{background:var(--panel);padding:16px;border-radius:10px;flex:1;transition:background 0.15s,border-color 0.15s,transform 0.15s;border:1px solid rgba(13,148,136,0.15);cursor:default}
-.card:hover{background:var(--panel2);border-color:var(--accent);transform:translateY(-2px)}
-.card strong{color:var(--muted);font-size:0.8rem;text-transform:uppercase;letter-spacing:0.8px}
-.card .big{font-size:2rem;font-weight:700;margin-top:6px;color:var(--accent-light)}
+/* Layout */
+.app-root { display: flex; min-height: 100vh }
+
+/* Sidebar */
+.sidebar {
+  width: 220px;
+  min-height: 100vh;
+  background: var(--sidebar);
+  display: flex;
+  flex-direction: column;
+  padding: 24px 16px;
+  position: fixed;
+  top: 0; left: 0; bottom: 0;
+}
+.sidebar h1 {
+  margin: 0 0 32px;
+  font-size: 1.4rem;
+  color: #fff;
+  letter-spacing: 0.5px;
+}
+.sidebar h1 span { color: var(--accent-light) }
+.sidebar nav { display: flex; flex-direction: column; gap: 4px }
+.sidebar nav button {
+  background: transparent;
+  border: none;
+  color: rgba(255,255,255,0.6);
+  padding: 10px 12px;
+  border-radius: 8px;
+  text-align: left;
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: all 0.15s;
+}
+.sidebar nav button:hover { background: rgba(255,255,255,0.08); color: #fff }
+.sidebar nav button.active { background: var(--sidebar-active); color: #fff; font-weight: 600 }
+
+/* Main content */
+.main-content {
+  margin-left: 220px;
+  flex: 1;
+  padding: 32px;
+}
+
+/* Page header */
+.page-header {
+  margin-bottom: 24px;
+}
+.page-header h2 { margin: 0 0 4px; font-size: 1.4rem; color: var(--text) }
+.page-header p { margin: 0; color: var(--muted); font-size: 0.875rem }
+
+/* Pipeline bar */
+.pipeline {
+  display: flex;
+  gap: 0;
+  background: var(--panel);
+  border-radius: 10px;
+  border: 1px solid var(--border);
+  margin-bottom: 24px;
+  overflow: hidden;
+}
+.pipeline-item {
+  flex: 1;
+  padding: 16px 20px;
+  border-right: 1px solid var(--border);
+  cursor: default;
+  transition: background 0.15s;
+}
+.pipeline-item:last-child { border-right: none }
+.pipeline-item:hover { background: #f5faf8 }
+.pipeline-item .count { font-size: 1.6rem; font-weight: 700; color: var(--accent) }
+.pipeline-item .label { font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.8px; color: var(--muted); margin-top: 2px }
 
 /* Recent list */
-.recent{background:var(--panel);padding:16px;border-radius:10px;border:1px solid rgba(13,148,136,0.1)}
-.recent h2{margin:0 0 12px;font-size:1rem;color:var(--muted);text-transform:uppercase;letter-spacing:0.8px}
-.recent ul{list-style:none;padding:0;margin:0}
-.recent li{display:flex;justify-content:space-between;padding:10px 0;border-bottom:1px solid rgba(13,148,136,0.08)}
-.recent li:last-child{border-bottom:0}
-.recent li .right{color:var(--accent-light);font-size:0.85rem}
+.recent {
+  background: var(--panel);
+  border-radius: 10px;
+  border: 1px solid var(--border);
+  overflow: hidden;
+}
+.recent-header {
+  padding: 16px 20px;
+  border-bottom: 1px solid var(--border);
+  font-weight: 600;
+  font-size: 0.9rem;
+  color: var(--text);
+}
+.recent ul { list-style: none; padding: 0; margin: 0 }
+.recent li {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px 20px;
+  border-bottom: 1px solid var(--border);
+  font-size: 0.875rem;
+}
+.recent li:last-child { border-bottom: none }
+.recent li .company { font-weight: 600; color: var(--text) }
+.recent li .role { color: var(--muted); font-size: 0.8rem; margin-top: 2px }
+.recent li .status-badge {
+  padding: 3px 10px;
+  border-radius: 99px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  background: #e6f4ef;
+  color: var(--accent);
+}
 
-/* Applications toolbar */
-.applications .toolbar{display:flex;gap:8px;margin-bottom:12px}
-.applications input,.applications select{padding:8px 12px;border-radius:6px;border:1px solid rgba(13,148,136,0.2);background:var(--panel);color:var(--text);outline:none;transition:border-color 0.15s}
-.applications input:focus,.applications select:focus{border-color:var(--accent)}
-.applications input{flex:1}
-.applications select option{background:var(--panel);color:var(--text)}
-
-/* Buttons */
-button{cursor:pointer;transition:all 0.15s}
-.toolbar button{padding:8px 16px;border-radius:6px;background:var(--accent);border:none;color:#fff;font-weight:600}
-.toolbar button:hover{background:var(--accent-light)}
-.actions button{padding:6px 12px;border-radius:6px;background:transparent;border:1px solid rgba(13,148,136,0.3);color:var(--muted);font-size:0.85rem}
-.actions button:hover{border-color:var(--accent);color:var(--accent-light)}
+/* Toolbar */
+.applications .toolbar {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 16px;
+  align-items: center;
+}
+.applications input, .applications select {
+  padding: 8px 12px;
+  border-radius: 8px;
+  border: 1px solid var(--border);
+  background: var(--panel);
+  color: var(--text);
+  font-size: 0.875rem;
+  outline: none;
+  transition: border-color 0.15s;
+}
+.applications input { flex: 1 }
+.applications input:focus, .applications select:focus { border-color: var(--accent) }
+.applications select option { background: var(--panel); color: var(--text) }
+.toolbar .add-btn {
+  padding: 8px 18px;
+  border-radius: 8px;
+  background: var(--accent);
+  border: none;
+  color: #fff;
+  font-weight: 600;
+  font-size: 0.875rem;
+  cursor: pointer;
+  transition: background 0.15s;
+  white-space: nowrap;
+}
+.toolbar .add-btn:hover { background: var(--accent-light) }
 
 /* Table */
-.apps-table{width:100%;border-collapse:collapse;background:var(--panel);border-radius:10px;overflow:hidden;border:1px solid rgba(13,148,136,0.1)}
-.apps-table th{padding:12px 10px;text-align:left;background:rgba(13,148,136,0.08);color:var(--muted);font-size:0.8rem;text-transform:uppercase;letter-spacing:0.8px}
-.apps-table td{padding:11px 10px;text-align:left;border-bottom:1px solid rgba(13,148,136,0.06)}
-.apps-table tr:last-child td{border-bottom:0}
-.apps-table tbody tr:hover{background:rgba(13,148,136,0.05)}
+.apps-table {
+  width: 100%;
+  border-collapse: collapse;
+  background: var(--panel);
+  border-radius: 10px;
+  overflow: hidden;
+  border: 1px solid var(--border);
+  font-size: 0.875rem;
+}
+.apps-table th {
+  padding: 12px 16px;
+  text-align: left;
+  background: #f5faf8;
+  color: var(--muted);
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.8px;
+  font-weight: 600;
+  border-bottom: 1px solid var(--border);
+}
+.apps-table td {
+  padding: 13px 16px;
+  border-bottom: 1px solid var(--border);
+  color: var(--text);
+}
+.apps-table tr:last-child td { border-bottom: none }
+.apps-table tbody tr:hover { background: #f5faf8 }
+
+/* Status badges in table */
+.apps-table .status-cell {
+  padding: 3px 10px;
+  border-radius: 99px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  display: inline-block;
+}
+.status-Applied { background: #e0f2fe; color: #0369a1 }
+.status-Interviewing { background: #fef9c3; color: #854d0e }
+.status-Offer { background: #dcfce7; color: #166534 }
+.status-Rejected { background: #fee2e2; color: #991b1b }
+
+/* Action buttons */
+.actions button {
+  padding: 5px 12px;
+  border-radius: 6px;
+  background: transparent;
+  border: 1px solid var(--border);
+  color: var(--muted);
+  font-size: 0.8rem;
+  cursor: pointer;
+  transition: all 0.15s;
+  margin-left: 6px;
+}
+.actions button:hover { border-color: var(--accent); color: var(--accent) }
+.actions button:first-child { margin-left: 0 }
 
 /* Modal */
-.modal-backdrop{position:fixed;inset:0;background:rgba(0,0,0,0.6);backdrop-filter:blur(2px);display:flex;align-items:center;justify-content:center}
-.modal{background:var(--panel);padding:24px;border-radius:12px;width:440px;border:1px solid rgba(13,148,136,0.25)}
-.modal h3{margin:0 0 16px;color:var(--accent-light)}
-.modal form label{display:block;margin-bottom:10px;font-size:0.875rem;color:var(--muted)}
-.modal input,.modal select,.modal textarea{width:100%;padding:8px 12px;border-radius:6px;border:1px solid rgba(13,148,136,0.2);background:var(--panel2);color:var(--text);outline:none;transition:border-color 0.15s;margin-top:4px}
-.modal input:focus,.modal select:focus,.modal textarea:focus{border-color:var(--accent)}
-.modal select option{background:var(--panel2);color:var(--text)}
-.modal textarea{resize:vertical;min-height:72px}
-.modal .actions{display:flex;justify-content:flex-end;gap:8px;margin-top:16px}
-.modal .actions button[type=button]{padding:8px 16px;border-radius:6px;background:transparent;border:1px solid rgba(255,255,255,0.1);color:var(--muted)}
-.modal .actions button[type=button]:hover{border-color:rgba(255,255,255,0.2);color:var(--text)}
-.modal .actions button[type=submit]{padding:8px 16px;border-radius:6px;background:var(--accent);border:none;color:#fff;font-weight:600}
-.modal .actions button[type=submit]:hover{background:var(--accent-light)}
+.modal-backdrop {
+  position: fixed; inset: 0;
+  background: rgba(0,0,0,0.35);
+  backdrop-filter: blur(3px);
+  display: flex; align-items: center; justify-content: center;
+  z-index: 100;
+}
+.modal {
+  background: var(--panel);
+  padding: 28px;
+  border-radius: 14px;
+  width: 460px;
+  border: 1px solid var(--border);
+  box-shadow: 0 20px 60px rgba(0,0,0,0.15);
+}
+.modal h3 { margin: 0 0 20px; color: var(--text); font-size: 1.1rem }
+.modal form label {
+  display: block;
+  margin-bottom: 12px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--muted);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+.modal input, .modal select, .modal textarea {
+  width: 100%;
+  padding: 9px 12px;
+  border-radius: 8px;
+  border: 1px solid var(--border);
+  background: var(--bg);
+  color: var(--text);
+  font-size: 0.875rem;
+  outline: none;
+  transition: border-color 0.15s;
+  margin-top: 4px;
+}
+.modal input:focus, .modal select:focus, .modal textarea:focus { border-color: var(--accent) }
+.modal select option { background: var(--panel); color: var(--text) }
+.modal textarea { resize: vertical; min-height: 80px }
+.modal .actions { display: flex; justify-content: flex-end; gap: 8px; margin-top: 20px }
+.modal .actions button[type=button] {
+  padding: 9px 18px; border-radius: 8px;
+  background: transparent; border: 1px solid var(--border);
+  color: var(--muted); cursor: pointer; font-size: 0.875rem;
+  transition: all 0.15s;
+}
+.modal .actions button[type=button]:hover { border-color: var(--muted); color: var(--text) }
+.modal .actions button[type=submit] {
+  padding: 9px 18px; border-radius: 8px;
+  background: var(--accent); border: none;
+  color: #fff; font-weight: 600; cursor: pointer; font-size: 0.875rem;
+  transition: background 0.15s;
+}
+.modal .actions button[type=submit]:hover { background: var(--accent-light) }
