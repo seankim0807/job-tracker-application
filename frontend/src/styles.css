@@ -212,7 +212,57 @@ body { margin: 0; background: var(--bg); color: var(--text) }
 .actions button:hover { border-color: var(--accent); color: var(--accent) }
 .actions button:first-child { margin-left: 0 }
 
-/* Modal */
+/* Avatar */
+.avatar {
+  width: 32px; height: 32px;
+  border-radius: 50%;
+  display: inline-flex; align-items: center; justify-content: center;
+  color: #fff; font-weight: 700; font-size: 0.8rem;
+  flex-shrink: 0;
+}
+.company-cell { display: flex; align-items: center; gap: 10px }
+
+/* Delete button */
+.btn-delete:hover { border-color: #ef4444 !important; color: #ef4444 !important }
+
+/* Empty state */
+.empty-state {
+  text-align: center;
+  padding: 64px 24px;
+  background: var(--panel);
+  border-radius: 10px;
+  border: 1px solid var(--border);
+}
+.empty-icon { font-size: 2.5rem; margin-bottom: 12px }
+.empty-state h3 { margin: 0 0 8px; color: var(--text); font-size: 1.1rem }
+.empty-state p { margin: 0 0 20px; color: var(--muted); font-size: 0.875rem }
+
+/* Loading skeleton */
+.loading-rows { display: flex; flex-direction: column; gap: 8px }
+.skeleton-row {
+  height: 52px;
+  border-radius: 8px;
+  background: linear-gradient(90deg, var(--panel) 25%, #e8f0ed 50%, var(--panel) 75%);
+  background-size: 200% 100%;
+  animation: shimmer 1.2s infinite;
+}
+@keyframes shimmer { 0%{background-position:200% 0} 100%{background-position:-200% 0} }
+
+/* Toast */
+.toast {
+  position: fixed; bottom: 24px; right: 24px;
+  padding: 12px 20px;
+  border-radius: 8px;
+  font-size: 0.875rem;
+  font-weight: 500;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.15);
+  animation: slideUp 0.2s ease;
+  z-index: 999;
+}
+.toast-success { background: #0d7a55; color: #fff }
+.toast-error { background: #dc2626; color: #fff }
+@keyframes slideUp { from{transform:translateY(16px);opacity:0} to{transform:translateY(0);opacity:1} }
+
 .modal-backdrop {
   position: fixed; inset: 0;
   background: rgba(0,0,0,0.35);
@@ -221,6 +271,7 @@ body { margin: 0; background: var(--bg); color: var(--text) }
   z-index: 100;
 }
 .modal {
+  animation: modalIn 0.2s ease;
   background: var(--panel);
   padding: 28px;
   border-radius: 14px;
@@ -268,3 +319,4 @@ body { margin: 0; background: var(--bg); color: var(--text) }
   transition: background 0.15s;
 }
 .modal .actions button[type=submit]:hover { background: var(--accent-light) }
+@keyframes modalIn { from{transform:translateY(12px);opacity:0} to{transform:translateY(0);opacity:1} }

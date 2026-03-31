@@ -2,6 +2,20 @@ import React, {useEffect, useState} from 'react'
 
 const STATUSES = ['Applied','Interviewing','Offer','Rejected']
 
+function Avatar({name}){
+  const colors = ['#0d6e4f','#0e7490','#7c3aed','#b45309','#9f1239','#1d4ed8']
+  const i = name.charCodeAt(0) % colors.length
+  return (
+    <span className="avatar" style={{background:colors[i]}}>{name[0].toUpperCase()}</span>
+  )
+}
+
+function fmt(d){
+  if(!d) return ''
+  const dt = new Date(d + (d.includes('T') ? '' : 'T00:00:00'))
+  return dt.toLocaleDateString('en-US',{month:'short',day:'numeric'})
+}
+
 export default function Dashboard({api}){
   const [stats, setStats] = useState({total:0, counts:{}, response_rate:0})
   const [recent, setRecent] = useState([])
@@ -40,15 +54,23 @@ export default function Dashboard({api}){
         <ul>
           {recent.slice(0,8).map(a=>(
             <li key={a.id}>
-              <div>
-                <div className="company">{a.company}</div>
-                <div className="role">{a.role}</div>
+              <div className="company-cell">
+                <Avatar name={a.company} />
+                <div>
+                  <div className="company">{a.company}</div>
+                  <div className="role">{a.role}</div>
+                </div>
               </div>
-              <span className={`status-badge status-${a.status}`}>{a.status}</span>
+              <div style={{display:'flex',alignItems:'center',gap:'12px'}}>
+                <span style={{color:'var(--muted)',fontSize:'0.8rem'}}>{fmt(a.date_applied || a.created_at?.slice(0,10))}</span>
+                <span className={`status-badge status-${a.status}`}>{a.status}</span>
+              </div>
             </li>
           ))}
           {recent.length === 0 && (
-            <li style={{color:'var(--muted)',justifyContent:'center',padding:'24px'}}>No applications yet</li>
+            <li style={{color:'var(--muted)',justifyContent:'center',padding:'32px 20px',fontSize:'0.875rem'}}>
+              No applications yet — add one to get started!
+            </li>
           )}
         </ul>
       </div>
