@@ -1,19 +1,12 @@
 import React, {useEffect, useState} from 'react'
 import ModalForm from './ModalForm'
 import Toast from './Toast'
+import Avatar from './Avatar'
 
 function fmt(d){
   if(!d) return '—'
   const dt = new Date(d + (d.includes('T') ? '' : 'T00:00:00'))
   return dt.toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'})
-}
-
-function Avatar({name}){
-  const colors = ['#0d6e4f','#0e7490','#7c3aed','#b45309','#9f1239','#1d4ed8']
-  const i = name.charCodeAt(0) % colors.length
-  return (
-    <span className="avatar" style={{background:colors[i]}}>{name[0].toUpperCase()}</span>
-  )
 }
 
 export default function Applications({api}){
@@ -96,7 +89,7 @@ export default function Applications({api}){
               <tr key={a.id}>
                 <td>
                   <div className="company-cell">
-                    <Avatar name={a.company} />
+                    <Avatar name={a.company} url={a.url} />
                     <span>{a.company}</span>
                   </div>
                 </td>

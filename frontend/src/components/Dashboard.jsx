@@ -1,14 +1,7 @@
 import React, {useEffect, useState} from 'react'
+import Avatar from './Avatar'
 
 const STATUSES = ['Applied','Interviewing','Offer','Rejected']
-
-function Avatar({name}){
-  const colors = ['#0d6e4f','#0e7490','#7c3aed','#b45309','#9f1239','#1d4ed8']
-  const i = name.charCodeAt(0) % colors.length
-  return (
-    <span className="avatar" style={{background:colors[i]}}>{name[0].toUpperCase()}</span>
-  )
-}
 
 function fmt(d){
   if(!d) return ''
@@ -55,7 +48,7 @@ export default function Dashboard({api}){
           {recent.slice(0,8).map(a=>(
             <li key={a.id}>
               <div className="company-cell">
-                <Avatar name={a.company} />
+                <Avatar name={a.company} url={a.url} />
                 <div>
                   <div className="company">{a.company}</div>
                   <div className="role">{a.role}</div>
