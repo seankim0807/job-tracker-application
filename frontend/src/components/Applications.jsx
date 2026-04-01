@@ -150,24 +150,26 @@ export default function Applications({api}){
               <th onClick={()=>toggleSort('company')} className="sortable">Company <SortIcon col="company"/></th>
               <th onClick={()=>toggleSort('role')} className="sortable">Role <SortIcon col="role"/></th>
               <th onClick={()=>toggleSort('status')} className="sortable">Status <SortIcon col="status"/></th>
+              <th onClick={()=>toggleSort('location')} className="sortable">Location <SortIcon col="location"/></th>
               <th onClick={()=>toggleSort('date_applied')} className="sortable">Date <SortIcon col="date_applied"/></th>
               <th>Actions</th>
             </tr>
           </thead>
           <tbody>
             {sorted.map(a=>(
-              <tr key={a.id} className={a.notes?'has-notes':''} data-notes={a.notes||''}>
+              <tr key={a.id} className={a.notes?'has-notes':''} data-notes={a.notes?`📝 ${a.notes}`:''}>
                 <td>
                   <div className="company-cell">
                     <Avatar name={a.company} url={a.url}/>
                     <div>
-                      <div className="company-name">{a.company}</div>
+                      <div className="company-name">{a.company}{a.notes && <span className="notes-dot" title="Has notes">📝</span>}</div>
                       {a.url && <a href={a.url.startsWith('http')?a.url:'https://'+a.url} target="_blank" rel="noreferrer" className="job-link">View posting ↗</a>}
                     </div>
                   </div>
                 </td>
                 <td className="role-cell">{a.role}</td>
                 <td><StatusPicker value={a.status} onChange={s=>onStatusChange(a.id,s)}/></td>
+                <td className="location-cell">{a.location || <span className="muted-dash">—</span>}</td>
                 <td className="date-cell">{fmt(a.date_applied||a.created_at?.slice(0,10))}</td>
                 <td className="actions">
                   <button onClick={()=>setModal(a)}>Edit</button>
