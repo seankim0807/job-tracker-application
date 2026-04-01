@@ -2,6 +2,8 @@
 
 A full-stack web app for managing your job search — track applications, monitor your pipeline, and export your data, all in one place.
 
+**Live Demo:** [job-tracker-application-ten.vercel.app](https://job-tracker-application-ten.vercel.app/)
+
 **Repository:** [github.com/seankim0807/job-tracker-application](https://github.com/seankim0807/job-tracker-application)
 
 ---
