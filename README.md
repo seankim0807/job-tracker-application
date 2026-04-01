@@ -4,7 +4,7 @@ A full-stack web app for managing your job search — track applications, monito
 
 **Live Demo:** [job-tracker-application-ten.vercel.app](https://job-tracker-application-ten.vercel.app/)
 
-**Repository:** [github.com/seankim0807/job-tracker-application](https://github.com/seankim0807/job-tracker-application)
+**Repository:** [github.com/sean-kim05/job-tracker-application](https://github.com/sean-kim05/job-tracker-application)
 
 ---
 
