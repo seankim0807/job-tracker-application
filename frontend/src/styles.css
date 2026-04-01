@@ -169,9 +169,12 @@ body { margin: 0; background: var(--bg); color: var(--text); -webkit-font-smooth
 .apps-table tr:last-child td { border-bottom: none }
 .apps-table tbody tr { transition: background 0.12s }
 .apps-table tbody tr:hover { background: var(--panel-hover) }
-.company-name { font-weight: 600; color: var(--text) }
+.company-name { font-weight: 600; color: var(--text); display: flex; align-items: center; gap: 6px }
+.notes-dot { font-size: 0.75rem; opacity: 0.6 }
 .role-cell { color: var(--text-secondary) }
+.location-cell { color: var(--muted); font-size: 0.82rem }
 .date-cell { color: var(--muted); font-size: 0.82rem }
+.muted-dash { color: var(--border) }
 
 /* ── Sortable ── */
 .sortable { cursor: pointer; user-select: none; transition: color 0.12s }
@@ -379,6 +382,7 @@ body { margin: 0; background: var(--bg); color: var(--text); -webkit-font-smooth
   .pipeline { flex-wrap: wrap }
   .pipeline-item { min-width: 45%; border-bottom: 1px solid var(--border) }
   .apps-table th:nth-child(4), .apps-table td:nth-child(4) { display: none }
+  .apps-table th:nth-child(5), .apps-table td:nth-child(5) { display: none }
   .toolbar { flex-wrap: wrap }
   .toolbar input { width: 100%; order: -1 }
   .result-count { display: none }
