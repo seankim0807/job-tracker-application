@@ -220,6 +220,7 @@ body { margin: 0; background: var(--bg); color: var(--text) }
   color: #fff; font-weight: 700; font-size: 0.8rem;
   flex-shrink: 0;
 }
+.avatar-img { object-fit: contain; background: #fff; border: 1px solid var(--border) }
 .company-cell { display: flex; align-items: center; gap: 10px }
 
 /* Delete button */
