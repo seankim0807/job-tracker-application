@@ -1,7 +1,10 @@
-import React, {useEffect, useState} from 'react'
+import React, {useEffect, useState, useRef} from 'react'
 import ModalForm from './ModalForm'
 import Toast from './Toast'
 import Avatar from './Avatar'
+import ConfirmDialog from './ConfirmDialog'
+
+const STATUSES = ['Applied','Interviewing','Offer','Rejected']
 
 function fmt(d){
   if(!d) return '—'
@@ -12,18 +15,43 @@ function fmt(d){
 function exportCSV(apps){
   const headers = ['Company','Role','Status','Location','URL','Date Applied','Notes','Created At']
   const rows = apps.map(a=>[
-    a.company, a.role, a.status, a.location||'', a.url||'',
-    a.date_applied||'', a.notes||'', a.created_at?.slice(0,10)||''
+    a.company,a.role,a.status,a.location||'',a.url||'',
+    a.date_applied||'',a.notes||'',a.created_at?.slice(0,10)||''
   ])
   const csv = [headers,...rows].map(r=>r.map(v=>`"${String(v).replace(/"/g,'""')}"`).join(',')).join('\n')
   const blob = new Blob([csv],{type:'text/csv'})
   const url = URL.createObjectURL(blob)
   const el = document.createElement('a')
-  el.href = url; el.download = 'applications.csv'; el.click()
+  el.href=url; el.download='applications.csv'; el.click()
   URL.revokeObjectURL(url)
 }
 
-const SORT_COLS = {company:'company', role:'role', status:'status', date:'date_applied'}
+function StatusPicker({value, onChange}){
+  const [open, setOpen] = useState(false)
+  const ref = useRef()
+  useEffect(()=>{
+    function handle(e){ if(ref.current && !ref.current.contains(e.target)) setOpen(false) }
+    document.addEventListener('mousedown', handle)
+    return ()=>document.removeEventListener('mousedown', handle)
+  },[])
+  return (
+    <div className="status-picker" ref={ref}>
+      <span className={`status-cell status-${value}`} onClick={e=>{e.stopPropagation();setOpen(o=>!o)}} title="Click to change status">
+        {value} ▾
+      </span>
+      {open && (
+        <div className="status-dropdown">
+          {STATUSES.map(s=>(
+            <div key={s} className={`status-option ${s===value?'active':''}`}
+              onClick={e=>{e.stopPropagation();onChange(s);setOpen(false)}}>
+              <span className={`status-cell status-${s}`}>{s}</span>
+            </div>
+          ))}
+        </div>
+      )}
+    </div>
+  )
+}
 
 export default function Applications({api}){
   const [apps, setApps] = useState([])
@@ -34,6 +62,7 @@ export default function Applications({api}){
   const [toast, setToast] = useState(null)
   const [sortCol, setSortCol] = useState('created_at')
   const [sortDir, setSortDir] = useState('desc')
+  const [confirmId, setConfirmId] = useState(null)
 
   function load(){
     setLoading(true)
@@ -42,24 +71,35 @@ export default function Applications({api}){
 
   useEffect(()=>{ load() },[q,status])
 
+  useEffect(()=>{
+    function onKey(e){
+      if(e.key==='n'&&!modal&&e.target.tagName!=='INPUT'&&e.target.tagName!=='TEXTAREA') setModal({})
+      if(e.key==='Escape') setModal(null)
+    }
+    document.addEventListener('keydown',onKey)
+    return ()=>document.removeEventListener('keydown',onKey)
+  },[modal])
+
   function toggleSort(col){
     if(sortCol===col) setSortDir(d=>d==='asc'?'desc':'asc')
-    else { setSortCol(col); setSortDir('asc') }
+    else{setSortCol(col);setSortDir('asc')}
   }
 
   const sorted = [...apps].sort((a,b)=>{
-    const v1 = (a[sortCol]||'').toLowerCase()
-    const v2 = (b[sortCol]||'').toLowerCase()
-    return sortDir==='asc' ? v1.localeCompare(v2) : v2.localeCompare(v1)
+    const v1=(a[sortCol]||'').toLowerCase()
+    const v2=(b[sortCol]||'').toLowerCase()
+    return sortDir==='asc'?v1.localeCompare(v2):v2.localeCompare(v1)
   })
 
-  function showToast(message,type='success'){ setToast({message,type}) }
+  function showToast(message,type='success'){setToast({message,type})}
 
-  async function onAdd(data){ await api.createApplication(data); setModal(null); load(); showToast('Application added') }
-  async function onEdit(id,data){ await api.updateApplication(id,data); setModal(null); load(); showToast('Application updated') }
-  async function onDelete(id){
-    if(!confirm('Delete this application?')) return
-    await api.deleteApplication(id); load(); showToast('Application deleted','error')
+  async function onAdd(data){await api.createApplication(data);setModal(null);load();showToast('Application added')}
+  async function onEdit(id,data){await api.updateApplication(id,data);setModal(null);load();showToast('Application updated')}
+  async function onDelete(){
+    await api.deleteApplication(confirmId);setConfirmId(null);load();showToast('Application deleted','error')
+  }
+  async function onStatusChange(id,newStatus){
+    await api.updateApplication(id,{status:newStatus});load();showToast(`Status updated to ${newStatus}`)
   }
 
   function SortIcon({col}){
@@ -67,24 +107,31 @@ export default function Applications({api}){
     return <span className="sort-icon active">{sortDir==='asc'?'↑':'↓'}</span>
   }
 
+  const confirmApp = apps.find(a=>a.id===confirmId)
+
   return (
     <div className="applications">
       {toast && <Toast message={toast.message} type={toast.type} onDone={()=>setToast(null)}/>}
+      {confirmId && <ConfirmDialog
+        message={`Are you sure you want to delete "${confirmApp?.company} — ${confirmApp?.role}"?`}
+        onConfirm={onDelete}
+        onCancel={()=>setConfirmId(null)}
+      />}
+
       <div className="page-header">
         <h2>Applications</h2>
         <p>Manage and track all your job applications</p>
       </div>
+
       <div className="toolbar">
         <input placeholder="Search company, role, notes…" value={q} onChange={e=>setQ(e.target.value)}/>
         <select value={status} onChange={e=>setStatus(e.target.value)}>
           <option value="">All Statuses</option>
-          <option>Applied</option>
-          <option>Interviewing</option>
-          <option>Offer</option>
-          <option>Rejected</option>
+          {STATUSES.map(s=><option key={s}>{s}</option>)}
         </select>
+        {!loading && <span className="result-count">{sorted.length} application{sorted.length!==1?'s':''}</span>}
         <button className="export-btn" onClick={()=>exportCSV(apps)} disabled={apps.length===0}>↓ Export</button>
-        <button className="add-btn" onClick={()=>setModal({})}>+ Add</button>
+        <button className="add-btn" onClick={()=>setModal({})}>+ Add <kbd>N</kbd></button>
       </div>
 
       {loading ? (
@@ -114,17 +161,17 @@ export default function Applications({api}){
                   <div className="company-cell">
                     <Avatar name={a.company} url={a.url}/>
                     <div>
-                      <div>{a.company}</div>
+                      <div className="company-name">{a.company}</div>
                       {a.url && <a href={a.url.startsWith('http')?a.url:'https://'+a.url} target="_blank" rel="noreferrer" className="job-link">View posting ↗</a>}
                     </div>
                   </div>
                 </td>
-                <td>{a.role}</td>
-                <td><span className={`status-cell status-${a.status}`}>{a.status}</span></td>
-                <td>{fmt(a.date_applied||a.created_at?.slice(0,10))}</td>
+                <td className="role-cell">{a.role}</td>
+                <td><StatusPicker value={a.status} onChange={s=>onStatusChange(a.id,s)}/></td>
+                <td className="date-cell">{fmt(a.date_applied||a.created_at?.slice(0,10))}</td>
                 <td className="actions">
                   <button onClick={()=>setModal(a)}>Edit</button>
-                  <button className="btn-delete" onClick={()=>onDelete(a.id)}>Delete</button>
+                  <button className="btn-delete" onClick={()=>setConfirmId(a.id)}>Delete</button>
                 </td>
               </tr>
             ))}
