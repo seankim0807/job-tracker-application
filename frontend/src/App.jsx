@@ -21,6 +21,7 @@ export default function App(){
           <button onClick={()=>navigate('dashboard')} className={view==='dashboard'?'active':''}>📊 Dashboard</button>
           <button onClick={()=>navigate('applications')} className={view==='applications'?'active':''}>📋 Applications</button>
         </nav>
+        <div className="sidebar-footer">Job Tracker v1.0</div>
       </aside>
       <main className="main-content">
         <div className="mobile-topbar">
