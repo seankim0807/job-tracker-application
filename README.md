@@ -126,3 +126,4 @@ JobApplicationTracker/
 | Interviewing | Active in the interview process              |
 | Offer        | Received an offer                            |
 | Rejected     | Application was not successful               |
+
