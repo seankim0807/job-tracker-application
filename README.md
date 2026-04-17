@@ -127,3 +127,4 @@ JobApplicationTracker/
 | Offer        | Received an offer                            |
 | Rejected     | Application was not successful               |
 
+ 
